@@ -42,15 +42,14 @@ Secara default aplikasi akan memakai mode preview. Data disimpan di browser mela
 
 ## Menghubungkan Ke Google Apps Script
 
-1. Copy `.env.example` menjadi `.env.local`
-2. Isi `NEXT_PUBLIC_FINANCIAL_API_URL` dengan URL Web App Google Apps Script
-3. Restart server Next.js
-
-Contoh:
+1. Buat file `.env.local`
+2. Isi URL Web App Google Apps Script seperti ini:
 
 ```env
 NEXT_PUBLIC_FINANCIAL_API_URL=https://script.google.com/macros/s/your-deployment-id/exec
 ```
+
+3. Restart server Next.js
 
 ## Deploy Backend Google Apps Script
 
@@ -60,16 +59,17 @@ Langkah deploy:
 
 1. Buat Google Spreadsheet baru
 2. Buka `Extensions -> Apps Script`
-3. Paste isi [google-apps-script/Code.gs](./google-apps-script/Code.gs) dan `appsscript.json`
-4. Di `Project Settings -> Script Properties`, tambahkan:
+3. Paste isi [google-apps-script/Code.gs](./google-apps-script/Code.gs) ke file `Code.gs`
+4. Ganti isi `appsscript.json` dengan versi di [google-apps-script/appsscript.json](./google-apps-script/appsscript.json)
+5. Di `Project Settings -> Script Properties`, tambahkan:
 
 ```txt
 SPREADSHEET_ID=<id spreadsheet anda>
 ```
 
-5. Deploy sebagai `Web app`
-6. Set akses sesuai kebutuhan
-7. Copy URL deployment ke `NEXT_PUBLIC_FINANCIAL_API_URL`
+6. Deploy sebagai `Web app`
+7. Set akses sesuai kebutuhan
+8. Copy URL deployment ke `NEXT_PUBLIC_FINANCIAL_API_URL`
 
 Sheet yang dipakai akan dibuat otomatis:
 
