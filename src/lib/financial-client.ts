@@ -19,6 +19,7 @@ import type {
 } from "@/types/financial";
 
 const STORAGE_PREFIX = "track-financial";
+const FINANCIAL_PROXY_PATH = "/api/financial";
 
 export type FinancialClient = {
   mode: "preview" | "google-apps-script";
@@ -122,9 +123,9 @@ async function requestJson<T>(input: RequestInfo, init?: RequestInit): Promise<T
   return (await response.json()) as T;
 }
 
-function createGoogleAppsScriptClient(baseUrl: string): FinancialClient {
+function createGoogleAppsScriptClient(): FinancialClient {
   async function getCollection<T>(action: string, userId: string) {
-    const url = new URL(baseUrl);
+    const url = new URL(FINANCIAL_PROXY_PATH, window.location.origin);
     url.searchParams.set("action", action);
     url.searchParams.set("userId", userId);
 
@@ -137,7 +138,7 @@ function createGoogleAppsScriptClient(baseUrl: string): FinancialClient {
   }
 
   async function mutate(userId: string, action: MutationAction, data: Record<string, unknown>) {
-    const result = await requestJson<ApiResponse<unknown>>(baseUrl, {
+    const result = await requestJson<ApiResponse<unknown>>(FINANCIAL_PROXY_PATH, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -209,11 +210,13 @@ function createGoogleAppsScriptClient(baseUrl: string): FinancialClient {
 }
 
 export function createFinancialClient(): FinancialClient {
-  const baseUrl = process.env.NEXT_PUBLIC_FINANCIAL_API_URL;
+  const isRemoteEnabled =
+    process.env.NEXT_PUBLIC_FINANCIAL_API_ENABLED === "true" ||
+    Boolean(process.env.NEXT_PUBLIC_FINANCIAL_API_URL);
 
-  if (!baseUrl) {
+  if (!isRemoteEnabled) {
     return createLocalPreviewClient();
   }
 
-  return createGoogleAppsScriptClient(baseUrl);
+  return createGoogleAppsScriptClient();
 }

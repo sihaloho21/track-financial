@@ -9,6 +9,9 @@ Platform manajemen finansial pribadi berbasis `Next.js` untuk:
 
 Frontend berjalan langsung dengan mode preview berbasis `localStorage`, lalu bisa dihubungkan ke backend `Google Apps Script + Google Sheets` saat siap production.
 
+Catatan penting:
+request ke Google Apps Script sekarang dilewatkan dulu ke proxy `Next.js` (`/api/financial`) supaya aman dari error CORS di browser.
+
 ## Stack
 
 - `Next.js 16` + React 19
@@ -50,6 +53,13 @@ NEXT_PUBLIC_FINANCIAL_API_URL=https://script.google.com/macros/s/your-deployment
 ```
 
 3. Restart server Next.js
+
+Jika ingin URL hanya dipakai di server, gunakan:
+
+```env
+FINANCIAL_API_URL=https://script.google.com/macros/s/your-deployment-id/exec
+NEXT_PUBLIC_FINANCIAL_API_ENABLED=true
+```
 
 ## Deploy Backend Google Apps Script
 
